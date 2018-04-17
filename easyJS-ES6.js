@@ -1,5 +1,5 @@
 // 我的JS库：
-let myJS = {
+let easyJS = {
 // 数组排序:
 // arr:
 // 	类型:Array
@@ -261,4 +261,4 @@ let myJS = {
 		}
 
 }
-export default myJS
+export default easyJS
