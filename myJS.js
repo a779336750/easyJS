@@ -1,5 +1,5 @@
 // 我的JS库：
-var myJS = {
+var easyJS = {
 // 数组排序:
 // arr:
 // 	类型:Array
