@@ -359,7 +359,7 @@
 		// sortMethods:
 		// 	类型:String
 		// 	定义:具有两个值:'up'代表升序,'dowm'代表降序
-		A.extend({mySort:function (arr,sortMethods) {
+		A.extend({newSort:function (arr,sortMethods) {
 			switch(sortMethods) {
 				case 'up':return arr.sort(this.upSort);
 				break;
@@ -378,7 +378,7 @@
 		// deadLine:
 		// 类型:number
 		// 定义:倒计时间长度
-		A.extend({countUp:function countUp(deadLine) {
+		A.extend({countUp:function (deadLine) {
 			for (var i = 0; i <= deadLine; i++) {
 					setTimeout(function(num){
 							return function() {
@@ -391,7 +391,7 @@
 		// deadLine:
 		// 类型:number
 		// 定义:倒计时间长度	
-		A.extend({countDown:function countDown(deadLine) {
+		A.extend({countDown:function (deadLine) {
 			for (var i = 0; i <= deadLine; i++) {
 					(function a(i) {
 						setTimeout(function() {
@@ -513,15 +513,6 @@
 
 			
 		// 装饰者模式
-		// throttle接受两个参数
-		// 第一个参数：要执行的dom对象
-		// 第二个参数：事件类型,
-		// 第三个参数：执行的事件
-		// {
-		// 		context: null,//表示函数的作用域
-		// 		args: [],//函数的参数
-		// 		time:300//节流的时间间隔，即多个函数的触发时间间隔小于此时间，则只执行最后一个函数
-		// }
 		A.extend({decoration: function (dom,type,fn) {
 			var originalEvent = dom[type];
 			if (typeof dom[type] === 'function') {
@@ -589,6 +580,52 @@
 				arr[i] = html_collection[i];
 			}
 			return arr;
+		},menoize: function(fn,cache) {
+			// 使用缓存，把以产生的计算结果缓存下来，方便下次使用。避免在多次调用函数时，重复计算。
+			// fn:
+				//定义: 原函数的函数名
+				//类型: function	
+			// cache：
+				// 定义：可预先设定的缓存
+				// 类型：object
+			var menonize_cache = cache||{};
+			return function(arr) {
+				if (!menonize_cache[arr]) {
+					menonize_cache[arr] = fn(arr);
+				}
+				return menonize_cache[arr];
+			}
+		},processArray: function(items,process,callback) {
+			// 使用定时器处理数组，避免长时间运行脚本导致浏览器假死
+			// items:数组
+			// process：数组成员处理函数
+			// callback：执行完的回调
+			var todo = items.concat();
+			setTimeout(function(){
+				process(todo.shift());
+				if (todo.length > 0) {
+					setTimeout(arguments.callee,25);
+				}else {
+					if (callback) {
+						callback(items);
+					}
+				}
+			},25);
+		},multiStep: function(steps,args,callback) {
+			// 使用定时器处理任务，避免长时间运行脚本导致浏览器假死
+			// steps:任务的函数名的数组
+			// args：处理函数的参数
+			// callback：执行完的回调
+			var tasks = steps.concat();
+			setTimeout(function(){
+				var task = tasks.shift();
+				task.apply(null,args);
+				if (tasks.length > 0) {
+					setTimeout(arguments.callee,25);
+				}else {
+					callback();
+				}
+			},25);
 		}});
 
 

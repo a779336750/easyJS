@@ -168,3 +168,17 @@ the file mgJS-ES6 is for ES6 programing。just import it with "import mgJS from 
 			html集合转数组
 			参数：
 				html_collection：html集合，如：document.getELementByTagName(Tagname)返回的html集合
+		menoize
+			使用缓存，把以产生的计算结果缓存下来，方便下次使用。避免在多次调用函数时，重复计算。
+			fn:
+				定义: 原函数的函数名
+				类型: function	
+			cache：
+				定义：可预先设定的缓存
+				类型：object
+		processArray(items,process,callback)：
+			使用定时器处理数组，避免循环语句长时间运行脚本导致浏览器假死
+			参数：
+				items:数组
+				process：数组成员处理函数
+				callback：执行完的回调
