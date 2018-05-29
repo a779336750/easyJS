@@ -182,3 +182,23 @@ the file mgJS-ES6 is for ES6 programing。just import it with "import mgJS from 
 				items:数组
 				process：数组成员处理函数
 				callback：执行完的回调
+		multiStep(steps,args,callback)
+			若一个任务可以被分解成多个任务，使用定时器处理多个任务，避免长时间运行脚本导致浏览器假死
+			参数：
+				steps:任务的函数名的数组
+				args：处理函数的参数
+				callback：执行完的回调
+
+		handleImageData(data,mimeType)
+			使用multipart xhr技术生成的多图片分割后，对图片进行处理
+		    参数：
+				data：图片转换后的base64字符串
+				mimeType：图片类型
+		handleCss:(data)
+			使用multipart xhr技术生成的多css分割后，把css样式添加到文档中
+			参数：
+				data：css样式代码
+		handleJavaScript:(data)
+			使用multipart xhr技术生成的js分割后，把js代码执行
+			参数：
+				data：javascript代码

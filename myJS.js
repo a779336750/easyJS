@@ -41,7 +41,7 @@
 		}
 
 		A.fn.init.prototype = A.fn;
-		// extend方法
+		// extend方法,用于扩展库api
 		A.extend = A.fn.extend = function() {
 			var i = 1,
 				len = arguments.length,
@@ -626,6 +626,30 @@
 					callback();
 				}
 			},25);
+		},handleImageData:function(data,mimeType){
+			// 使用multipart xhr技术生成的多图片分割后，对图片进行处理
+			// 参数：
+				// data：图片转换后的base64字符串
+				// mimeType：图片类型
+			var img = document.createElement('img');
+			var imgType = mimeType||'images/jpeg';
+			img.src = 'data:'+imgType+';base64,'+data;
+			return img;
+		},handleCss:function(data){
+			// 使用multipart xhr技术生成的多css分割后，把css样式添加到文档中
+			// 参数：
+				// data：css样式代码
+			var style = document.createElement('style');
+			style.type = 'text/css';
+			var node = createTextNode(data);
+			style.appendChild(node);
+			document.getElementsByTagName('head')[0].appendChild(style);
+			return img;
+		},handleJavaScript:function(data){
+			// 使用multipart xhr技术生成的js分割后，把js代码执行
+			// 参数：
+				// data：javascript代码
+				eval(data);
 		}});
 
 
