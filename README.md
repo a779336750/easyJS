@@ -202,3 +202,8 @@ the file mgJS-ES6 is for ES6 programing。just import it with "import mgJS from 
 			使用multipart xhr技术生成的js分割后，把js代码执行
 			参数：
 				data：javascript代码
+		getUrlParams:(url)
+			URL中查询字符串中的参数
+			参数：
+				url:要获取查询字符串的的url
+			若无参数：则获取当前页面的url

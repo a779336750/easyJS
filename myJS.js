@@ -650,6 +650,18 @@
 			// 参数：
 				// data：javascript代码
 				eval(data);
+		},getUrlParams:function(url){
+			// URL中查询字符串中的参数
+			var url = url||window.location.href;
+			if (url.indexOf('?') < 0) return null;
+			//拖不存在查询字符串，则返回null
+			var paramList = url.split('?')[1].split('&');
+			var params = {};
+			for (var i = 0,len = paramList.length; i < len; i++) {
+				var s = paramList[i].split('=');
+				params[s[0]] = s[1];	
+			}
+			return params;
 		}});
 
 
