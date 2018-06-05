@@ -400,32 +400,40 @@
 					})(i);
 			}
 		}});		
-		// JSONParse实现的深拷贝
-		// obj:
+		// 递归实现的深拷贝
+		// newObj:
 		// 类型:Object
-		// 定义:被拷贝的对象
+		// 定义:新的对象
+		// initObj：
+		// 定义：被拷贝的对象
 		// return:一个新的对象
-		//注意： constructor始终为Object,只适用于扁平的对象，如Number,Array,String,扁平对象		
 		A.extend({deepCopy:function (initObj,newObj) {
 			var obj = newObj||{};
 			for(var i in initObj) {
 				var prop = initObj[i];
 				if (prop === obj) {
 					continue;
-				}//防止自身调用产生死循环
-				if (typeof initObj[i] === 'object') {
-					if (initObj[i].constructor === Array) {
+				}
+				//防止自身调用产生死循环
+				if (typeof prop === 'object') {
+					if (prop.constructor === Array) {
 						obj[i] = [];
 					}else {
 						obj[i] = {};
 					}
-					arguments.callee(initObj[i],obj[i]);
+					arguments.callee(prop,obj[i]);
 				}else {
-					obj[i] = initObj[i];
+					obj[i] = prop;
 				}
 			}
 			return obj;
 		}});		
+		// JSONParse实现的深拷贝
+		// obj:
+		// 类型:Object
+		// 定义:被拷贝的对象
+		// return:一个新的对象
+		//注意： constructor始终为Object,只适用于扁平的对象，如Number,Array,String,扁平对象		
 		A.extend({deepCopyByJSONParse:function(obj) {
 				var newObj = {};
 				newObj = JSON.parse(JSON.stringify(obj));
@@ -662,6 +670,15 @@
 				params[s[0]] = s[1];	
 			}
 			return params;
+		},removeRepetition:function(arr){
+			// 去重
+			var result = [];
+			for (var i = 0,len = arr.length; i < len; i++) {
+				if (arr.indexOf(arr[i],(i+1)) < 0) {
+					result.push(arr[i]);
+				}
+			}
+			return result;
 		}});
 
 

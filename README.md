@@ -194,16 +194,23 @@ the file mgJS-ES6 is for ES6 programing。just import it with "import mgJS from 
 		    参数：
 				data：图片转换后的base64字符串
 				mimeType：图片类型
-		handleCss:(data)
+		handleCss(data)
 			使用multipart xhr技术生成的多css分割后，把css样式添加到文档中
 			参数：
 				data：css样式代码
-		handleJavaScript:(data)
+		handleJavaScript(data)
 			使用multipart xhr技术生成的js分割后，把js代码执行
 			参数：
 				data：javascript代码
-		getUrlParams:(url)
+		getUrlParams(url)
 			URL中查询字符串中的参数
 			参数：
 				url:要获取查询字符串的的url
 			若无参数：则获取当前页面的url
+		removeRepetition(arr)
+			数组去重
+			参数：
+				arr:要去重的数组
+			return 
+				新的无重复数组
+		
