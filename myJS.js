@@ -1,7 +1,15 @@
-// 我的JS库，嗯~：
-// 选择器
-// selector：
-// 可以是object,id,className，tagName,function
+/**
+ * 我的JS库，嗯~
+ */
+
+/**
+ *
+ * @param selector:可以是object,id,className，tagName,function
+ * @param context
+ * @returns {A.init}
+ * @constructor
+ */
+
 function A(selector, context) {
     if (typeof selector === 'function') {
         A(window).on('load', selector);
@@ -41,7 +49,10 @@ A.fn = A.prototype = {
 }
 
 A.fn.init.prototype = A.fn;
-// extend方法,用于扩展库api
+/**
+ *
+ * extend方法,用于扩展库api
+ */
 A.extend = A.fn.extend = function () {
     var i = 1,
         len = arguments.length,
@@ -125,6 +136,10 @@ A.extend = A.fn.extend = function () {
 // A.fn.extend({});
 // 通过extend方法添加attr方法,改变元素attr
 A.fn.extend({
+    /**
+     *
+     * 分别扩展类似于jquery的html(),addClass(),attr(),css()的dom操作
+     */
     html: function () {
         var len = this.length;
         var args = arguments;
@@ -150,7 +165,6 @@ A.fn.extend({
         }
         return this;
     }, attr: function () {
-        // 通过extend方法添加attr方法,改变元素attr
         var len = this.length;
         var args = arguments;
         if (arguments.length === 2) {
@@ -190,8 +204,10 @@ A.fn.extend({
         }
         return this;
     }, on: function (type, fn) {
-        // 通过extend方法添加on事件
-        //注意，此处通过惰性模式，在该库加载时就立即执行on函数，重新定义on函数。减去了多个分支，提高性能
+        /**
+         * 通过extend方法添加on事件
+         *注意，此处通过惰性模式，在该库加载时就立即执行on函数，重新定义on函数。减去了多个分支，提高性能
+         */
         if (document.addEventListener) {
             return function (type, fn) {
                 var len = this.length;
@@ -219,9 +235,14 @@ A.fn.extend({
         }
     }()
 });
-// 通过extend方法添加getClientTop方法
-// 获取元素相对浏览器上部高度
+
 A.extend({
+    /**
+     * 通过extend方法添加getClientTop方法,获取元素相对浏览器上部高度
+     * @param ele:要获取相对浏览器上部高度的dom元素
+     * @returns {number}：元素相对浏览器上部高度
+     */
+
     getClientTop: function (ele) {
         var top = 0;
         while (ele !== null) {
@@ -231,9 +252,14 @@ A.extend({
         return top;
     }
 });
-// 通过extend方法添加getClientLeft方法
-// 获取元素相对浏览器左侧高度
+
 A.extend({
+    /**
+     * 通过extend方法添加getClientLeft方法
+     * 获取元素相对浏览器左侧高度
+     * @param ele:要获取相对浏览器左侧高度的dom元素
+     * @returns {number}：相对浏览器左侧高度的dom元素
+     */
     getClientLeft: function (ele) {
         var Left = 0;
         while (ele !== null) {
@@ -244,9 +270,12 @@ A.extend({
     }
 });
 
-// 获取浏览器文档高度和长度
-// 返回：一个对象，height属性为高度，width属性为长度
+
 A.extend({
+    /**
+     * 获取浏览器文档高度和长度
+     * @returns {{height: number, width: number}}：height属性为高度，width属性为长度
+     */
     getDocumentSize: function () {
         return {
             height: Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight),
@@ -254,10 +283,18 @@ A.extend({
         }
     }
 });
-// 事件方法汇总
+
 A.extend({
+    /**
+     * 兼容的事件方法汇总
+     */
     EventUtil: {
-        // 删除事件
+        /**
+         * 解绑事件
+         * @param ele:解绑事件的dom元素
+         * @param eventName：要解绑的事件，名
+         * @param handler：事件处理函数
+         */
         removeHandler: function (ele, eventName, handler) {
             if (ele.removeEventListener) {
                 ele.removeEventListener(eventName, handler);
@@ -267,12 +304,26 @@ A.extend({
                 ele['on' + eventName] = null;
             }
         },
+        /**
+         * 获取事件对象的兼容写法
+         * @param event 事件处理函数的e参数（事件对象）
+         * @returns {*|Event | undefined} 返回的兼容的事件对象
+         */
         getEvent: function (event) {
             return event || window.event;
         },
+        /**
+         * 获取实践对象的目标元素
+         * @param event：事件处理函数的e参数（事件对象）
+         * @returns {*|Object|Element}：返回的兼容的目标元素
+         */
         getTarget: function (event) {
             return event.target || event.srcElement;
         },
+        /**
+         * 防止默认事件
+         * @param event
+         */
         preventDefault: function (event) {
             if (event.preventDefault) {
                 event.preventDefault();
@@ -280,6 +331,10 @@ A.extend({
                 event.returnValue = false;
             }
         },
+        /**
+         * 防止事件冒泡
+         * @param event
+         */
         stopPropagation: function (event) {
             if (event.stopPropagation) {
                 event.stopPropagation();
@@ -287,19 +342,13 @@ A.extend({
                 event.cancelBubble = true;
             }
         },
-        // 事件委托
-        // eventName:
-        // 类型:String
-        // 定义:事件名字
-        // parentEle:
-        // 类型:nodeType
-        // 定义:将要注册事件的父元素
-        // selector:
-        // 类型:String
-        // 定义:选择器，可以是className或者tagName
-        // handler:
-        // 类型:function
-        // 定义:事件的执行函数
+        /**
+         * 事件委托
+         * @param parentEle:将要注册事件的父元素
+         * @param eventName:事件名称
+         * @param selector:选择器，可以是className或者tagName
+         * @param handler：事件的执行函数
+         */
         entrust_on: function (parentEle, eventName, selector, handler) {
             var a = function (ev) {
                 var event = ev || window.event;
@@ -328,19 +377,13 @@ A.extend({
         },
     }
 });
-
-
-// cookie:
-// name:
-// 类型:string
-// 定义:cookie名
-// value:
-// 类型:value
-// 定义:cookie值
-// iDay:
-// 类型:number
-// 定义:cookie保存时间
 A.extend({
+    /**
+     * 整合cookie相关操作
+     * name:cookie名
+     * value:cookie值
+     * number:cookie保存时间
+     */
     Cookie: {
         setCookie: function (name, value, iDay) {
             var oDate = new Date();
@@ -364,14 +407,13 @@ A.extend({
         },
     }
 });
-// 数组排序:
-// arr:
-// 	类型:Array
-// 	定义:需要改变顺序的数组
-// sortMethods:
-// 	类型:String
-// 	定义:具有两个值:'up'代表升序,'dowm'代表降序
 A.extend({
+    /**
+     * 数组排序:
+     * @param arr:需要改变顺序的数组
+     * @param sortMethods:具有两个值:'up'代表升序,'dowm'代表降序
+     * @returns :返回新的数组
+     */
     newSort: function (arr, sortMethods) {
         switch (sortMethods) {
             case 'up':
@@ -386,20 +428,27 @@ A.extend({
     }
 });
 A.extend({
+    /**
+     * 升序比较:
+     */
     upSort: function upSort(arg1, arg2) {
         return arg1 > arg2;
     }
 });
 A.extend({
+    /**
+     * 降序比较
+     */
     downSort: function downSort(arg1, arg2) {
         return arg1 < arg2;
     }
 });
-// 计时：
-// deadLine:
-// 类型:number
-// 定义:倒计时间长度
+
 A.extend({
+    /**
+     * 计时：
+     * @param deadLine:时间长度
+     */
     countUp: function (deadLine) {
         for (var i = 0; i <= deadLine; i++) {
             setTimeout(function (num) {
@@ -410,11 +459,11 @@ A.extend({
         }
     }
 });
-// 计时：
-// deadLine:
-// 类型:number
-// 定义:倒计时间长度
 A.extend({
+    /**
+     * 倒计时：
+     * @param deadLine:倒计时时间长度
+     */
     countDown: function (deadLine) {
         for (var i = 0; i <= deadLine; i++) {
             (function a(i) {
@@ -433,6 +482,12 @@ A.extend({
 // 定义：被拷贝的对象
 // return:一个新的对象
 A.extend({
+    /**
+     * 深拷贝（递归实现）
+     * @param initObj：被拷贝对象
+     * @param newObj：拷贝对象（可选）
+     * @returns {*|{}}：返回的新的对象
+     */
     deepCopy: function (initObj, newObj) {
         var obj = newObj || {};
         for (var i in initObj) {
@@ -455,25 +510,32 @@ A.extend({
         return obj;
     }
 });
-// JSONParse实现的深拷贝
-// obj:
-// 类型:Object
-// 定义:被拷贝的对象
-// return:一个新的对象
-//注意： constructor始终为Object,只适用于扁平的对象，如Number,Array,String,扁平对象
+
 A.extend({
+    /**
+     * JSONParse实现的深拷贝
+     * @param obj:被拷贝的对象
+     * @returns {any}:一个新的对象
+     * 注意:constructor始终为Object,只适用于扁平的对象，如Number,Array,String,扁平对象
+     */
     deepCopyByJSONParse: function (obj) {
         var newObj = {};
         newObj = JSON.parse(JSON.stringify(obj));
         return newObj;
     }
 });
-//网易rem移动布局
-// 把理想视口设置为布局视口
-// 根据设计图宽度动态设置字体大小为100px;
-// 设计图中所有的尺寸都除以100得出以rem单位的值
-// 字体大小采用媒体查询
+//
+
 A.extend({
+    /**
+     * 网易rem移动布局
+     * 把理想视口设置为布局视口
+     *根据设计图宽度动态设置字体大小为100px;
+     *设计图中所有的尺寸都除以100得出以rem单位的值
+     *字体大小采用媒体查询
+     * @param rate:比率，如宽度为750px的页面为750/100 = 7.5
+     *
+     */
     mobileRemSizingByWangYi: function (rate) {
         var meta = document.createElement('meta');
         meta.setAttribute('name', 'viewport');
@@ -485,8 +547,11 @@ A.extend({
     }
 });
 
-// 图片懒加载
+
 A.extend({
+    /**
+     * 图片懒加载
+     */
     imageLazyLoad: function () {
         var imgList = document.querySelectorAll('body img');
         imgArrayList = Array.prototype.slice.call(imgList, 0);
@@ -531,6 +596,16 @@ A.extend({
 // 		time:300//节流的时间间隔，即多个函数的触发时间间隔小于此时间，则只执行最后一个函数
 // }
 A.extend({
+    /**
+     * throttle接受两个参数
+     * 第一个参数：要执行的函数
+     * 第二个参数：一个对象，
+     * {
+     *  	context: null,//表示函数的作用域
+     * 		args: [],//函数的参数
+     * 		time:300//节流的时间间隔，即多个函数的触发时间间隔小于此时间，则只执行最后一个函数
+     * }
+     */
     throttle: function () {
         var isClear = arguments[0],
             fn;
@@ -554,8 +629,13 @@ A.extend({
 });
 
 
-// 装饰者模式
 A.extend({
+    /**
+     * 装饰者模式 (应用于事件处理)
+     * @param dom：注册事件的dom元素
+     * @param type：事件类型
+     * @param fn：事件处理函数
+     */
     decoration: function (dom, type, fn) {
         var originalEvent = dom[type];
         if (typeof dom[type] === 'function') {
@@ -569,12 +649,18 @@ A.extend({
     }
 });
 
-// 简单模板模式
-// 定义：通过格式化字符串拼凑出视图避免创建视图时大量节点操作
-// 参数：
-// str:模板字符串:如<span>{#span#}</span>
-// data:添加到模板字符串的数据，如{span:'this is the data for label "span" '}
+
 A.extend({
+    /**
+     * 简单模板模式
+     * 定义：通过格式化字符串拼凑出视图避免创建视图时大量节点操作
+     * 参数：
+     * str:模板字符串:如<span>{#span#}</span>
+     * data:添加到模板字符串的数据，如{span:'this is the data for label "span" '}
+     * @param str
+     * @param data
+     * @returns {string | * | void}
+     */
     formateString: function (str, data) {
         return str.replace(/\{#(\w+)#\}/g, function (match, key) {
             return typeof data[key] === 'undefined' ? '' : data[key]
@@ -607,13 +693,14 @@ A.extend({
         }
     }()
 });
-//创建元素
-// tag:
-// 定义元素标签名
-// attrs：
-// 定义：创建的元素的属性
-// 类型：object
+
 A.extend({
+    /**
+     * 创建元素
+     * @param tag:元素标签名
+     * @param attrs:创建的元素的属性
+     * @returns {HTMLElement}:返回创建的元素
+     */
     create: function (tag, attrs) {
         var ele = document.createElement(tag);
         if (typeof attrs === 'object') {
@@ -631,14 +718,14 @@ A.extend({
             arr[i] = html_collection[i];
         }
         return arr;
-    }, menoize: function (fn, cache) {
-        // 使用缓存，把以产生的计算结果缓存下来，方便下次使用。避免在多次调用函数时，重复计算。
-        // fn:
-        //定义: 原函数的函数名
-        //类型: function
-        // cache：
-        // 定义：可预先设定的缓存
-        // 类型：object
+    },
+    /**
+     * 使用缓存，把以产生的计算结果缓存下来，方便下次使用。避免在多次调用函数时，重复计算。
+     * @param fn:原函数的函数名
+     * @param cache:可预先设定的缓存
+     * @returns {function(*=): *}
+     */
+    menoize: function (fn, cache) {
         var menonize_cache = cache || {};
         return function (arr) {
             if (!menonize_cache[arr]) {
@@ -646,22 +733,7 @@ A.extend({
             }
             return menonize_cache[arr];
         }
-    }, processArray: function (items, process, callback) {
-        // 使用定时器处理数组，避免长时间运行脚本导致浏览器假死
-        // items:数组
-        // process：数组成员处理函数
-        // callback：执行完的回调
-        var todo = items.concat();
-        setTimeout(function () {
-            process(todo.shift());
-            if (todo.length > 0) {
-                setTimeout(arguments.callee, 25);
-            } else {
-                if (callback) {
-                    callback(items);
-                }
-            }
-        }, 25);
+
     }, multiStep: function (steps, args, callback) {
         // 使用定时器处理任务，避免长时间运行脚本导致浏览器假死
         // steps:任务的函数名的数组
@@ -677,32 +749,13 @@ A.extend({
                 callback();
             }
         }, 25);
-    }, handleImageData: function (data, mimeType) {
-        // 使用multipart xhr技术生成的多图片分割后，对图片进行处理
-        // 参数：
-        // data：图片转换后的base64字符串
-        // mimeType：图片类型
-        var img = document.createElement('img');
-        var imgType = mimeType || 'images/jpeg';
-        img.src = 'data:' + imgType + ';base64,' + data;
-        return img;
-    }, handleCss: function (data) {
-        // 使用multipart xhr技术生成的多css分割后，把css样式添加到文档中
-        // 参数：
-        // data：css样式代码
-        var style = document.createElement('style');
-        style.type = 'text/css';
-        var node = createTextNode(data);
-        style.appendChild(node);
-        document.getElementsByTagName('head')[0].appendChild(style);
-        return img;
-    }, handleJavaScript: function (data) {
-        // 使用multipart xhr技术生成的js分割后，把js代码执行
-        // 参数：
-        // data：javascript代码
-        eval(data);
-    }, getUrlParams: function (url) {
-        // URL中查询字符串中的参数
+    },
+    /**
+     * URL中查询字符串中的参数
+     * @param url
+     * @returns {null}:返回的查询字符串名值构成的对象
+     */
+    getUrlParams: function (url) {
         var url = url || window.location.href;
         if (url.indexOf('?') < 0) return null;
         //拖不存在查询字符串，则返回null
@@ -713,7 +766,13 @@ A.extend({
             params[s[0]] = s[1];
         }
         return params;
-    }, removeRepetition: function (arr) {
+    },
+    /**
+     * 去重
+     * @param arr：希望去重的数组
+     * @returns {Array}
+     */
+    removeRepetition: function (arr) {
         // 去重
         var result = [];
         for (var i = 0, len = arr.length; i < len; i++) {
@@ -722,7 +781,13 @@ A.extend({
             }
         }
         return result;
-    }, injectScriptToHeadPromise: function (src) {
+    },
+    /**
+     * 插入某个script标签到head标签内
+     * @param src：script标签的src
+     * @returns {Promise<any>}:返回一个promise
+     */
+    injectScriptToHeadPromise: function (src) {
         return new Promise(function (resolve, reject) {
             let headEl = document.getElementsByTagName('head')[0];
             let scriptEl = document.createElement('script');
@@ -730,11 +795,14 @@ A.extend({
             scriptEl.onload = resolve;
             scriptEl.onerror = reject;
             headEl.appendChild(scriptEl);
-        })
-        /**
-         * 在html的head标签处插入script
-         */
-    }, injectScriptToBodyPromise: function (src) {
+        });
+    },
+    /**
+     * 插入某个script标签到body标签尾部
+     * @param src：script标签的src
+     * @returns {Promise<any>}:返回一个promise
+     */
+    injectScriptToBodyPromise: function (src) {
         return new Promise(function (resolve, reject) {
             let headEl = document.getElementsByTagName('body')[0];
             let scriptEl = document.createElement('script');
